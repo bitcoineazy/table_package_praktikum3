@@ -1,6 +1,7 @@
 import csv
 import pickle
-
+import pandas
+import numpy
 
 class Package: #основной класс для csv/pickle load/save
     def __init__(self, file):#инициализация файлика(можно сделать и input'ом)
@@ -11,32 +12,27 @@ class Package: #основной класс для csv/pickle load/save
 
     def save_table_csv(self): #сохранение из внутреннего представления модуля
         directory = self.file
+        election = pandas.read_csv(directory)
+        # print(election)
+        election_modified = election.set_index('state')
+        print(election_modified)
+
+
+        '''
+        directory = self.file
         representation_dictionary = {} #наше представление(ключи - заголовки, значения - списки)
         with open(directory, newline='') as File:
             reader = csv.reader(File)
             csv_headings = next(reader)
             print(len(csv_headings))
             csv_values = []
-            if len(csv_headings) > 1:
-                for row in reader:
-                    col = list(row[i] for i in range(len(csv_headings)))
-                    csv_values.append(col)
-                for keys in csv_headings:
-                    representation_dictionary.update({keys:csv_values})
-                print(representation_dictionary)
-            else:
-                headings_join = ' '.join(csv_headings)
-                normal_headings = headings_join.split(';')
-                print(normal_headings)
-                dict_reader = csv.DictReader(File, dialect='excel')
-                for row in dict_reader:
-                    joined = ' '.join(row)
-                    print(joined)
-                print(csv_values)
-                for keys in normal_headings:
-                    representation_dictionary.update({keys:csv_values})
-                print(representation_dictionary)
-
+            for row in reader:
+                col = list(row[i] for i in range(len(csv_headings)))
+                csv_values.append(col)
+            for keys in csv_headings:
+                representation_dictionary.update({keys:csv_values})
+            print(representation_dictionary)
+        '''
     def load_table_pickle(self):
         directory = self.file
 
@@ -131,5 +127,5 @@ if __name__ == "__main__":
     #our_file = Package(r'C:\Users\79268\table_package\123123.csv.txt') #даём главному классу на вход наш файлик
     #our_file.load_table_csv() #наш файлик пройдёт через функцию и че-то сделает в перспективе(проверка главного класса)
     #functions = Operations(r'C:\Users\79268\table_package\123123.csv.txt', column= , types= ) #тут уже работаем с нашими настройками и функциями, как в задании и делаем что-то соответственно
-    ourfile = Package(r'C:\Users\79268\Dev\csvs\catalog.csv')
+    ourfile = Package(r'C:\Users\79268\Dev\csvs\governors_county.csv')
     ourfile.save_table_csv()
