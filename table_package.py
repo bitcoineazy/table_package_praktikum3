@@ -58,13 +58,23 @@ class Operations(Package): # Модули с базовыми операциям
         '''
 
 
-    def get_rows_by_index(self):
+    def get_rows_by_index(self, copy_table, **val):
+        output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
+        directory = self.file
+        key = val.values()
+        if copy_table == True:
+            frame = pandas.read_csv(directory)
+            print(pandas.concat([frame[key]], ignore_index=True))
+        elif copy_table == False:
+            frame = pandas.read_csv(directory)
+            frame[key].to_csv(output_directory, index=False)
+
         '''
         get_rows_by_index(val1, … , copy_table=False) – получение новой таблицы из одной строки или из строк со значениями в первом столбце,
         совпадающими с переданными аргументами val1, … , valN. Функция либо копирует исходные данные, либо создает новое представление таблицы,
         работающее с исходным набором данных (copy_table=False), таким образом изменения, внесенные через это представления будут наблюдаться и в исходной таблице.
         '''
-        pass
+
 
     def get_column_types(self):
         '''
@@ -129,4 +139,5 @@ if __name__ == "__main__":
     #ourfile.save_table_csv()
     #ourfile.load_table_csv()
     operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
-    operations.get_rows_by_number(0,10,copy_table=False)
+    #operations.get_rows_by_number(0,10,copy_table=False)
+    operations.get_rows_by_index(copy_table=True, val='state', val1='county', val3='percent', val4='total_votes')

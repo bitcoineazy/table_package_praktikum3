@@ -6,5 +6,6 @@ def save_table_csv():
     election = pandas.read_csv(file)
     #print(election)
     election_modified = election.set_index('state')
-    print(election_modified)
+    #print(election_modified)
+    print(election['percent'])
 save_table_csv()
