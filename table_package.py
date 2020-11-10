@@ -46,11 +46,11 @@ class Operations(Package): # Модули с базовыми операциям
         directory = self.file
         if copy_table == True:
             frame = pandas.read_csv(directory)
-            print(frame[start:stop+1])
+            print(frame[start:stop + 1])
         elif copy_table == False:
             frame = pandas.read_csv(directory)
             frame[start:stop + 1].to_csv(output_directory, index=False)
-
+            print(frame[start:stop + 1])
         '''
         get_rows_by_number(start, [stop], copy_table=False) – получение таблицы из одной строки или из строк из интервала по номеру строки.
         Функция либо копирует исходные данные, либо создает новое представление таблицы, работающее с исходным набором данных (copy_table=False),
