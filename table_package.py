@@ -77,25 +77,56 @@ class Operations(Package): # Модули с базовыми операциям
 
 
     def get_column_types(self):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        print(frame.info(null_counts=False, memory_usage=False)) #Object столбцы используются для хранения строковых данных
+        #by_number уже включен(built-in)
         '''
         get_column_types(by_number=True) – получение словаря вида столбец:тип_значений. Тип значения: int, float, bool, str (по умолчанию для всех столбцов).
         Параметр by_number определяет вид значения столбец – целочисленный индекс столбца или его строковое представление.
         '''
-        pass
-    def set_column_types(self):
+
+    def set_column_types(self, types_dict):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if types_dict == 'int':
+            frame_show = frame.select_dtypes(include=['int64'])
+            #print(frame_show)
+            print(frame_show.info(null_counts=False, memory_usage=False))
+        elif types_dict == 'float':
+            frame_show = frame.select_dtypes(include=['int64'])
+            #print(frame_show)
+            print(frame_show.info(null_counts=False, memory_usage=False))
+        elif types_dict == 'bool':
+            frame_show = frame.select_dtypes(include=['bool'])
+            #print(frame_show)
+            print(frame_show.info(null_counts=False, memory_usage=False))
+        elif types_dict == 'str':
+            frame_show = frame.select_dtypes(include=['object'])
+            #print(frame_show)
+            print(frame_show.info(null_counts=False, memory_usage=False))
+        else:
+            print('Введите тип значений')
+        # by_number уже включен(built-in)
         '''
         set_column_types(types_dict, by_number=True) – задание словаря вида столбец:тип_значений.
         Тип значения: int, float, bool, str (по умолчанию для всех столбцов).
         Параметр by_number определяет вид значения столбец – целочисленный индекс столбца или его строковое представление.
         '''
-        pass
 
-    def get_values(self):
+    def get_values(self, column):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if type(column) == str:
+            print(frame[column])
+        elif type(column) == int:
+            column_index = frame.columns[column]
+            print(frame[column_index])
+
         '''
         get_values(column=0) – получение списка значений (типизированных согласно типу столбца)
         таблицы из столбца либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца)
         '''
-        pass
 
     def get_value(self):
         '''
@@ -134,10 +165,14 @@ class Operations(Package): # Модули с базовыми операциям
 if __name__ == "__main__":
     #our_file = Package(r'C:\Users\79268\table_package\123123.csv.txt') #даём главному классу на вход наш файлик
     #our_file.load_table_csv() #наш файлик пройдёт через функцию и че-то сделает в перспективе(проверка главного класса)
-    #functions = Operations(r'C:\Users\79268\table_package\123123.csv.txt', column= , types= ) #тут уже работаем с нашими настройками и функциями, как в задании и делаем что-то соответственно
+    #functions = Operations(r'C:\Users\79268\table_package\123123.csv.txt') #тут уже работаем с нашими настройками и функциями, как в задании и делаем что-то соответственно
     #ourfile = Package(r'C:\Users\79268\Dev\csvs\governors_county.csv')
     #ourfile.save_table_csv()
     #ourfile.load_table_csv()
     operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
     #operations.get_rows_by_number(0,10,copy_table=False)
-    operations.get_rows_by_index(copy_table=True, val='state', val1='county', val3='percent', val4='total_votes')
+    #operations.get_rows_by_index(copy_table=True, val='state')
+    #operations.get_column_types()
+    #operations.set_column_types('str')
+    operations.get_values(0) #get_values(0-4(только одно число без кавычек)) или get_values('state'-'percent')
+    operations.get_values('percent')
