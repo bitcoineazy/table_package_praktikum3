@@ -128,32 +128,56 @@ class Operations(Package): # Модули с базовыми операциям
         таблицы из столбца либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца)
         '''
 
-    def get_value(self):
+    def get_value(self, column):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if type(column) == str:
+            print(frame[column])
+        elif type(column) == int:
+            column_index = frame.columns[column]
+            print(frame[column_index])
+
+
         '''
         get_value(column=0) – аналог get_values(column=0) для представления таблицы с одной строкой,
         возвращает не список, а одно значение (типизированное согласно типу столбца).
         '''
-        pass
 
-    def set_values(self):
+    def set_values(self, values, column):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if type(column) == str:
+            frame.loc[:, column] = values
+            print(frame)
+        elif type(column) == int:
+            column_index = frame.columns[column]
+            frame.loc[:, column_index] = values
+            print(frame)
         '''
         set_values(values, column=0) – задание списка значений values для столбца таблицы (типизированных согласно типу столбца)
         либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца).
         '''
-        pass
 
-    def set_value(self):
+
+    def set_value(self, values, column):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if type(column) == str:
+            frame.loc[:, column] = values
+            print(frame)
+        elif type(column) == int:
+            column_index = frame.columns[column]
+            frame.loc[:, column_index] = values
+            print(frame)
         '''
         set_value(column=0) – аналог set_values(value, column=0) для представления таблицы с одной строкой,
         устанавливает не список значений, а одно значение (типизированное согласно типу столбца).
         '''
-        pass
 
     def print_table(self):
-        '''
-        print_table() – вывод таблицы на печать.
-        '''
-        pass
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        print(frame)
 
     ''' Наше задание:
     7)	По аналогии с п. 6 реализовать функции eq (==), gr (>), ls (<), ge (>=), le (<=), ne (==), 
@@ -174,5 +198,8 @@ if __name__ == "__main__":
     #operations.get_rows_by_index(copy_table=True, val='state')
     #operations.get_column_types()
     #operations.set_column_types('str')
-    operations.get_values(0) #get_values(0-4(только одно число без кавычек)) или get_values('state'-'percent')
-    operations.get_values('percent')
+    #operations.get_values(0) #get_values(0-4(только одно число без кавычек)) или get_values('state'-'percent')
+    #operations.get_values('percent')
+    #operations.set_values(values='123bc', column=0) #столбец = числу
+    #operations.set_values(values='everything', column='state') #столбец = строке
+    operations.print_table()
