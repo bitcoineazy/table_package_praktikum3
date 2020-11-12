@@ -13,15 +13,10 @@ class Package: #основной класс для csv/pickle load/save
         new_frame = pandas.DataFrame(self.frame)
         new_frame.to_csv(output_directory)
 
-
     def save_table_csv(self): #сохранение из внутреннего представления модуля
         directory = self.file
-        self.frame = pandas.read_csv(directory)
-        # print(election)
-        frame_modified = self.frame.set_index('state')
-        print(self.frame)
-        self.columns = self.frame.columns.tolist()
-
+        frame = pandas.read_csv(directory)
+        print(frame)
 
     def load_table_pickle(self):
         directory = self.file
@@ -34,13 +29,9 @@ class Package: #основной класс для csv/pickle load/save
 
 
 class Operations(Package): # Модули с базовыми операциями над таблицами:
-    # тут функции будут уже из родительского класса брать load,save и че-то делать...
     def __init__(self, file):
         super().__init__(file) # унаследовали файлик из родительского класса
 
-        # Тут в перспективне будут инициализоровать подаваемые аргументы в функции ниже#
-        # ниже во всех функциях доработаю подаваемые аргументы(types, column, values, copy_table, by_number и тд
-        # также будем в функции будем подавать функции из главного класса - self.load_table_csv() и тд.
     def get_rows_by_number(self, start, stop, copy_table):
         output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
         directory = self.file
@@ -147,7 +138,7 @@ class Operations(Package): # Модули с базовыми операциям
         directory = self.file
         frame = pandas.read_csv(directory)
         if type(column) == str:
-            frame.loc[:, column] = values
+            frame.loc[:, column] = values #Set value for an entire column из документации
             print(frame)
         elif type(column) == int:
             column_index = frame.columns[column]
