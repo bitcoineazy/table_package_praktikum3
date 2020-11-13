@@ -2,16 +2,16 @@ import csv
 import pickle
 import pandas
 
+
 class Package: #основной класс для csv/pickle load/save
     def __init__(self, file):#инициализация файлика(можно сделать и input'ом)
         self.file = file
 
     def load_table_csv(self): #загрузка во внутреннее представление модуля
         output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
-        self.save_table_csv()
-        print(self.columns)
-        new_frame = pandas.DataFrame(self.frame)
-        new_frame.to_csv(output_directory)
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        frame.to_csv(output_directory)
 
     def save_table_csv(self): #сохранение из внутреннего представления модуля
         directory = self.file
@@ -113,7 +113,6 @@ class Operations(Package): # Модули с базовыми операциям
         elif type(column) == int:
             column_index = frame.columns[column]
             print(frame[column_index])
-
         '''
         get_values(column=0) – получение списка значений (типизированных согласно типу столбца)
         таблицы из столбца либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца)
@@ -127,8 +126,6 @@ class Operations(Package): # Модули с базовыми операциям
         elif type(column) == int:
             column_index = frame.columns[column]
             print(frame[column_index])
-
-
         '''
         get_value(column=0) – аналог get_values(column=0) для представления таблицы с одной строкой,
         возвращает не список, а одно значение (типизированное согласно типу столбца).
@@ -148,7 +145,6 @@ class Operations(Package): # Модули с базовыми операциям
         set_values(values, column=0) – задание списка значений values для столбца таблицы (типизированных согласно типу столбца)
         либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца).
         '''
-
 
     def set_value(self, values, column):
         directory = self.file
@@ -170,8 +166,132 @@ class Operations(Package): # Модули с базовыми операциям
         frame = pandas.read_csv(directory)
         print(frame)
 
+    def equall(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        if type(column[0]) == str:
+            equality = frame[column[0]] == frame[column[1]]
+            frame['equally'] = equality
+            print(frame['equally'])
+        elif type(column[0]) == int:
+            column_index_1 = frame.columns[column[0]]
+            column_index_2 = frame.columns[column[1]]
+            equality = frame[column_index_1] == frame[column_index_2]
+            frame['equally'] = equality
+            print(frame['equally'])
+
+    def greater(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        try:
+            if type(column[0]) == str:
+                greater_than = frame[column[0]] > frame[column[1]]
+                frame['greater'] = greater_than
+                print(frame['greater'])
+            elif type(column[0]) == int:
+                column_index_1 = frame.columns[column[0]]
+                column_index_2 = frame.columns[column[1]]
+                greater_than = frame[column_index_1] > frame[column_index_2]
+                frame['greater'] = greater_than
+                print(frame['greater'])
+        except TypeError:
+            print('Сравниваемые столбцы не должны быть строками и числами')
+
+    def less(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        try:
+            if type(column[0]) == str:
+                less_than = frame[column[0]] < frame[column[1]]
+                frame['less'] = less_than
+                print(frame['less'])
+            elif type(column[0]) == int:
+                column_index_1 = frame.columns[column[0]]
+                column_index_2 = frame.columns[column[1]]
+                less_than = frame[column_index_1] < frame[column_index_2]
+                frame['less'] = less_than
+                print(frame['less'])
+        except TypeError:
+            print('Сравниваемые столбцы не должны быть строками и числами')
+
+    def greater_or_equally(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        try:
+            if type(column[0]) == str:
+                ge = frame[column[0]] >= frame[column[1]]
+                frame['greater_or_equally'] = ge
+                print(frame['greater_or_equally'])
+            elif type(column[0]) == int:
+                column_index_1 = frame.columns[column[0]]
+                column_index_2 = frame.columns[column[1]]
+                ge = frame[column_index_1] >= frame[column_index_2]
+                frame['greater_or_equally'] = ge
+                print(frame['greater_or_equally'])
+        except TypeError:
+            print('Сравниваемые столбцы не должны быть строками и числами')
+
+    def less_or_equall(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        try:
+            if type(column[0]) == str:
+                le = frame[column[0]] <= frame[column[1]]
+                frame['less_or_equally'] = le
+                print(frame['less_or_equally'])
+            elif type(column[0]) == int:
+                column_index_1 = frame.columns[column[0]]
+                column_index_2 = frame.columns[column[1]]
+                le = frame[column_index_1] <= frame[column_index_2]
+                frame['less_or_equally'] = le
+                print(frame['less_or_equally'])
+
+        except TypeError:
+            print('Сравниваемые столбцы не должны быть строками и числами')
+
+    def not_equall(self, **columns):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+        column = list(columns.values())
+        if type(column[0]) == str:
+            ne = frame[column[0]] != frame[column[1]]
+            frame['not_equall'] = ne
+            print(frame['not_equall'])
+        elif type(column[0]) == int:
+            column_index_1 = frame.columns[column[0]]
+            column_index_2 = frame.columns[column[1]]
+            ne = frame[column_index_1] != frame[column_index_2]
+            frame['not_equall'] = ne
+            print(frame['not_equall'])
+
+    def filter_rows(self, bool_list, copy_table):
+        directory = self.file
+        frame = pandas.read_csv(directory)
+        if copy_table == True:
+            bool_list = frame.loc[frame[bool_list] == True]
+            print(bool_list)
+        elif copy_table == False:
+            bool_list = frame.loc[frame[bool_list] == True]
+            bool_list.to_csv(r'C:\Users\79268\Dev\csvs\output1.csv')
+
+    '''Пункт 6:
+    6)	Добавить набор функций add, sub, mul, div, которые обеспечат выполнение арифметических операций для столбцов типа
+     int, float, bool. Продумать сигнатуру функций и изменения в другие функции, которые позволят удобно выполнять арифметические операции 
+     со столбцами и присваивать результаты выч. Реализовать реагирование на некорректные значения с помощью генерации исключительных ситуаций.
+    '''
     ''' Наше задание:
-    7)	По аналогии с п. 6 реализовать функции eq (==), gr (>), ls (<), ge (>=), le (<=), ne (==), 
+    7)	По аналогии с п. 6 реализовать функции eq (==), gr (>), ls (<), ge (>=), le (<=), ne (!=), 
     которые возвращают список булевских значений длинной в количество строк сравниваемых столбцов. 
     Реализовать функцию filter_rows (bool_list, copy_table=False) – получение новой таблицы из строк для которых в bool_list (длинной в количество строк в таблице)
     находится значение True.
@@ -184,7 +304,9 @@ if __name__ == "__main__":
     #ourfile = Package(r'C:\Users\79268\Dev\csvs\governors_county.csv')
     #ourfile.save_table_csv()
     #ourfile.load_table_csv()
-    operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
+    #operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
+    operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
+    operations = Operations(r'C:\Users\79268\Dev\csvs\output.csv')
     #operations.get_rows_by_number(0,10,copy_table=False)
     #operations.get_rows_by_index(copy_table=True, val='state')
     #operations.get_column_types()
@@ -193,4 +315,12 @@ if __name__ == "__main__":
     #operations.get_values('percent')
     #operations.set_values(values='123bc', column=0) #столбец = числу
     #operations.set_values(values='everything', column='state') #столбец = строке
-    operations.print_table()
+    #operations.print_table()
+    #operations.equall(columns1=2, columns2=1)
+    #operations.equall(da='state', daa='state')
+    #operations.greater(first=3, second=5)
+    #operations.less(first=3, second=5)
+    #operations.greater_or_equally(first='Year', second='Year')
+    #operations.less_or_equall(first_column='Year', second='Year')
+    #operations.not_equall(f='Author', s='Year')
+    operations.filter_rows(bool_list='less', copy_table=False)
