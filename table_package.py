@@ -2,6 +2,7 @@ import csv
 import pickle
 import pandas
 
+pandas.options.display.expand_frame_repr = False
 
 class Package: #основной класс для csv/pickle load/save
     def __init__(self, file):#инициализация файлика(можно сделать и input'ом)
@@ -164,6 +165,8 @@ class Operations(Package): # Модули с базовыми операциям
     def print_table(self):
         directory = self.file
         frame = pandas.read_csv(directory)
+        pandas.options.display.max_rows = len(frame)
+
         print(frame)
 
     def equall(self, **columns):
@@ -211,12 +214,14 @@ class Operations(Package): # Модули с базовыми операциям
                 less_than = frame[column[0]] < frame[column[1]]
                 frame['less'] = less_than
                 print(frame['less'])
+
             elif type(column[0]) == int:
                 column_index_1 = frame.columns[column[0]]
                 column_index_2 = frame.columns[column[1]]
                 less_than = frame[column_index_1] < frame[column_index_2]
                 frame['less'] = less_than
                 print(frame['less'])
+
         except TypeError:
             print('Сравниваемые столбцы не должны быть строками и числами')
 
@@ -298,29 +303,29 @@ class Operations(Package): # Модули с базовыми операциям
     '''
 
 if __name__ == "__main__":
-    #our_file = Package(r'C:\Users\79268\table_package\123123.csv.txt') #даём главному классу на вход наш файлик
+    #our_file = Package(r'C:\Users\79268\Dev\csvs\governors_county.csv') #даём главному классу на вход наш файлик
     #our_file.load_table_csv() #наш файлик пройдёт через функцию и че-то сделает в перспективе(проверка главного класса)
     #functions = Operations(r'C:\Users\79268\table_package\123123.csv.txt') #тут уже работаем с нашими настройками и функциями, как в задании и делаем что-то соответственно
     #ourfile = Package(r'C:\Users\79268\Dev\csvs\governors_county.csv')
     #ourfile.save_table_csv()
     #ourfile.load_table_csv()
-    #operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
-    operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
-    operations = Operations(r'C:\Users\79268\Dev\csvs\output.csv')
-    #operations.get_rows_by_number(0,10,copy_table=False)
-    #operations.get_rows_by_index(copy_table=True, val='state')
+    #operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
+    #operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
+    operations = Operations(r'C:\Users\79268\Dev\csvs\output1.csv')
+    #operations.get_rows_by_number(0,25,copy_table=False)
+    #operations.get_rows_by_index(copy_table=True, val='total_votes')
     #operations.get_column_types()
-    #operations.set_column_types('str')
+    #operations.set_column_types('int')
     #operations.get_values(0) #get_values(0-4(только одно число без кавычек)) или get_values('state'-'percent')
     #operations.get_values('percent')
     #operations.set_values(values='123bc', column=0) #столбец = числу
     #operations.set_values(values='everything', column='state') #столбец = строке
     #operations.print_table()
-    #operations.equall(columns1=2, columns2=1)
+    #operations.equall(columns1='Price', columns2='Year')
     #operations.equall(da='state', daa='state')
     #operations.greater(first=3, second=5)
-    #operations.less(first=3, second=5)
+    operations.less(first=3, second=5)
     #operations.greater_or_equally(first='Year', second='Year')
-    #operations.less_or_equall(first_column='Year', second='Year')
+    #operations.less_or_equall(first_column='Year', second='Reviews')
     #operations.not_equall(f='Author', s='Year')
-    operations.filter_rows(bool_list='less', copy_table=False)
+    #operations.filter_rows(bool_list='less', copy_table=True)
