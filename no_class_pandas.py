@@ -1,4 +1,4 @@
-andas.options.display.expand_frame_repr = False
+Pandas.options.display.expand_frame_repr = False
 
 class Package: #основной класс для csv/pickle load/save
     def __init__(self, file):#инициализация файлика(можно сделать и input'ом)

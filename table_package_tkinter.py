@@ -3,6 +3,8 @@ import csv
 import pickle
 import pandas
 from tkinter import filedialog as fd
+from tabulate import tabulate
+from IPython.display import HTML, display
 import tkinter.ttk as ttk
 #загрузка во внутреннее  потом функции потом результат
 #2 нижние кнопки - загрузить(файловый менеджер), сохранить в файл(-csv,pickle,txt)
@@ -42,7 +44,7 @@ class Example(Frame):
 
         self.print_table = Button(self, command=self.print_table, text='print_table', width=16)
         self.print_table.grid(row=2, column=1)
-        self.open_file = Button(self, command=self.open_file,text='открыть', width=8)
+        self.open_file = Button(self, command=self.open_file,text='открыть', width=16)
         self.open_file.grid(row=2, column=0)
         self.pack()
        #self.get_rows_by_number.bind('<Button-1>', self.get_rows_by_number)
@@ -51,39 +53,32 @@ class Example(Frame):
         self.set_column_types.bind('<Button-1>', self.set_column_types)
         self.get_values.bind('<Button-1>', self.get_values)
         self.set_values.bind('<Button-1>', self.set_values)
-        buttonExample = Button(self, text="Open",command=self.print_table)
+        buttonExample = Button(self, text="Open",command=self.print_table, width=16)
         #self.print_table.bind('<Button-1>', self.print_table)
         #self.open_file.comman('<Button-1>', self.open_file)
 
-        #
 
-    def get_rows_by_number1(self):
-
-
+    def get_rows_by_number_new_window(self):
         frame = self.csv
         start = int(self.start_arg_entry.get())
         stop = int(self.stop_arg_entry.get())
         copy_table = bool(self.copy_table_entry.get())
         copy_table = True
-        output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
         if copy_table == True:
             text1 = frame[start:stop + 1]
         elif copy_table == False:
             text1 = frame[start:stop + 1]
-
-        label = Label(self.newWindow, text=text1)
-        label.grid(row=1)
+        label = Text(self.newWindow, width=200)
+        columns = text1.columns
+        label.insert(1.0, tabulate(text1, headers=columns))
+        label.grid(row=2)
 
     def button_save(self):
         files = [('All Files', '*.*'),
-
                  ('CSV Files', '*.csv'),
-
                  ('Text Document', '*.txt')]
-
         file = fd.asksaveasfile(filetypes=files, defaultextension=files)
-
-
+        file.write(self.csv)
 
     def get_rows_by_number(self):
 
@@ -96,22 +91,22 @@ class Example(Frame):
         stop_arg_label = Label(self.newWindow, text="stop:")
         copy_table_label = Label(self.newWindow, text='copy_table:')
 
-        start_arg_label.grid(row=0, column=0, sticky="e")
-        stop_arg_label.grid(row=0, column=2, sticky="e")
-        copy_table_label.grid(row=0, column=4, sticky="e")
+        start_arg_label.grid(row=0, column=0, sticky="w")
+        stop_arg_label.grid(row=0, column=2, sticky="w")
+        copy_table_label.grid(row=0, column=4, sticky="w")
 
         self.start_arg_entry = Entry(self.newWindow, textvariable=start_type)
         self.stop_arg_entry = Entry(self.newWindow, textvariable=stop_type)
         self.copy_table_entry = Entry(self.newWindow, textvariable=copy_type)
 
-        self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5)
-        self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5)
-        self.copy_table_entry.grid(row=0,column=5, padx=5, pady=5)
+        self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="w")
+        self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5, sticky="w")
+        self.copy_table_entry.grid(row=0,column=5, padx=5, pady=5, sticky="w")
 
-        button = Button(self.newWindow, command=self.get_rows_by_number1, text='OK!', width=3)
+        button = Button(self.newWindow, command=self.get_rows_by_number_new_window, text='OK!', width=3)
         button_save = Button(self.newWindow, command=self.button_save, text='SAVE', width=5)
-        button.grid(row=0, column=6, padx=5, pady=5)
-        button_save.grid(row=0, column=7, padx=5, pady=5)
+        button.grid(row=0, column=6, padx=5, pady=5, sticky="w")
+        button_save.grid(row=0, column=7, padx=5, pady=5, sticky="w")
 
 
 
@@ -144,14 +139,14 @@ class Example(Frame):
         print('print_table')
         newWindow = Toplevel(self)
 
-
-        labelExample = Label(newWindow, text=self.csv)
+        frame = self.csv
+        columns = frame.columns
+        labelExample = Text(newWindow)
+        labelExample.insert(1.0, tabulate(frame, headers=columns))
         labelExample.pack()
 
     def open_file(self):
         file_name = fd.askopenfilename()
-
-
         self.csv = pandas.read_csv(file_name)
         pandas.options.display.max_rows = len(self.csv)
 
@@ -163,8 +158,8 @@ class Example(Frame):
 
 
     def centerWindow(self):
-        w = 800
-        h = 800
+        w = 488
+        h = 60
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
         x = (sw - w) / 2

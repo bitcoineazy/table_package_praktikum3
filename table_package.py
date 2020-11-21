@@ -1,8 +1,16 @@
 import csv
 import pickle
 import pandas
-
+from tabulate import tabulate
+import numpy as np
 pandas.options.display.expand_frame_repr = False
+
+
+
+
+
+
+
 
 class Package: #основной класс для csv/pickle load/save
     def __init__(self, file):#инициализация файлика(можно сделать и input'ом)
@@ -39,6 +47,7 @@ class Operations(Package): # Модули с базовыми операциям
         if copy_table == True:
             frame = pandas.read_csv(directory)
             print(frame[start:stop + 1])
+
         elif copy_table == False:
             frame = pandas.read_csv(directory)
             frame[start:stop + 1].to_csv(output_directory, index=False)
@@ -311,8 +320,8 @@ if __name__ == "__main__":
     #ourfile.load_table_csv()
     #operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
     #operations = Operations(r'C:\Users\79268\Dev\csvs\bestsellers_with_categories.csv')
-    operations = Operations(r'C:\Users\79268\Dev\csvs\output1.csv')
-    #operations.get_rows_by_number(0,25,copy_table=False)
+    operations = Operations(r'C:\Users\79268\Dev\csvs\governors_county.csv')
+    operations.get_rows_by_number(0,25,copy_table=True)
     #operations.get_rows_by_index(copy_table=True, val='total_votes')
     #operations.get_column_types()
     #operations.set_column_types('int')
@@ -324,7 +333,7 @@ if __name__ == "__main__":
     #operations.equall(columns1='Price', columns2='Year')
     #operations.equall(da='state', daa='state')
     #operations.greater(first=3, second=5)
-    operations.less(first=3, second=5)
+    #operations.less(first=3, second=5)
     #operations.greater_or_equally(first='Year', second='Year')
     #operations.less_or_equall(first_column='Year', second='Reviews')
     #operations.not_equall(f='Author', s='Year')
