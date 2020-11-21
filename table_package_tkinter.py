@@ -63,6 +63,7 @@ class Example(Frame):
         frame = self.csv
         start = int(self.start_arg_entry.get())
         stop = int(self.stop_arg_entry.get())
+        copy_table = bool(self.copy_table_entry.get())
         copy_table = True
         output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
         if copy_table == True:
@@ -73,6 +74,14 @@ class Example(Frame):
         label = Label(self.newWindow, text=text1)
         label.grid(row=1)
 
+    def button_save(self):
+        files = [('All Files', '*.*'),
+
+                 ('CSV Files', '*.csv'),
+
+                 ('Text Document', '*.txt')]
+
+        file = fd.asksaveasfile(filetypes=files, defaultextension=files)
 
 
 
@@ -81,31 +90,36 @@ class Example(Frame):
         self.newWindow = Toplevel(self)
         start_type = IntVar()
         stop_type = IntVar()
+        copy_type = BooleanVar()
 
         start_arg_label = Label(self.newWindow,text="start:")
         stop_arg_label = Label(self.newWindow, text="stop:")
+        copy_table_label = Label(self.newWindow, text='copy_table:')
 
-        start_arg_label.grid(row=0, column=0, sticky="n")
-        stop_arg_label.grid(row=0, column=2, sticky="n")
+        start_arg_label.grid(row=0, column=0, sticky="e")
+        stop_arg_label.grid(row=0, column=2, sticky="e")
+        copy_table_label.grid(row=0, column=4, sticky="e")
 
         self.start_arg_entry = Entry(self.newWindow, textvariable=start_type)
         self.stop_arg_entry = Entry(self.newWindow, textvariable=stop_type)
+        self.copy_table_entry = Entry(self.newWindow, textvariable=copy_type)
 
         self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5)
         self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5)
+        self.copy_table_entry.grid(row=0,column=5, padx=5, pady=5)
 
         button = Button(self.newWindow, command=self.get_rows_by_number1, text='OK!', width=3)
-        button.grid(row=0, column=4, padx=5, pady=5)
-
-
-
-
+        button_save = Button(self.newWindow, command=self.button_save, text='SAVE', width=5)
+        button.grid(row=0, column=6, padx=5, pady=5)
+        button_save.grid(row=0, column=7, padx=5, pady=5)
 
 
 
         #labelForm = Entry(newWindow)
         #labelExample = Label(newWindow, text=self.text1)
         self.mainloop()
+
+
     def get_rows_by_index(self, event):
         print('get_rows_by_index')
 
