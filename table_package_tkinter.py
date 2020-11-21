@@ -57,24 +57,55 @@ class Example(Frame):
 
         #
 
-    def get_rows_by_number(self, start=1, stop=2, copy_table=True):
-        print('get_rows_by_number')
-        start = 1
-        stop = 2
+    def get_rows_by_number1(self):
+
+
+        frame = self.csv
+        start = int(self.start_arg_entry.get())
+        stop = int(self.stop_arg_entry.get())
         copy_table = True
-        newWindow = Toplevel(self)
         output_directory = r'C:\Users\79268\Dev\csvs\output.csv'
         if copy_table == True:
-            text1 = self.csv[start:stop + 1]
+            text1 = frame[start:stop + 1]
         elif copy_table == False:
-            text1 = self.csv[start:stop + 1]
+            text1 = frame[start:stop + 1]
+
+        label = Label(self.newWindow, text=text1)
+        label.grid(row=1)
 
 
 
 
-        labelExample = Label(newWindow, text=text1)
-        labelExample.pack()
+    def get_rows_by_number(self):
 
+        self.newWindow = Toplevel(self)
+        start_type = IntVar()
+        stop_type = IntVar()
+
+        start_arg_label = Label(self.newWindow,text="start:")
+        stop_arg_label = Label(self.newWindow, text="stop:")
+
+        start_arg_label.grid(row=0, column=0, sticky="n")
+        stop_arg_label.grid(row=0, column=2, sticky="n")
+
+        self.start_arg_entry = Entry(self.newWindow, textvariable=start_type)
+        self.stop_arg_entry = Entry(self.newWindow, textvariable=stop_type)
+
+        self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5)
+        self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5)
+
+        button = Button(self.newWindow, command=self.get_rows_by_number1, text='OK!', width=3)
+        button.grid(row=0, column=4, padx=5, pady=5)
+
+
+
+
+
+
+
+        #labelForm = Entry(newWindow)
+        #labelExample = Label(newWindow, text=self.text1)
+        self.mainloop()
     def get_rows_by_index(self, event):
         print('get_rows_by_index')
 
