@@ -66,9 +66,11 @@ class Example(Frame):
         copy_table = True
         if copy_table == True:
             text1 = frame[start:stop + 1]
+            self.csv = frame[start:stop + 1]
         elif copy_table == False:
             text1 = frame[start:stop + 1]
-        label = Text(self.newWindow, width=200)
+            self.csv = frame[start:stop + 1]
+        label = Text(self.newWindow, width=150)
         columns = text1.columns
         label.insert(1.0, tabulate(text1, headers=columns))
         label.grid(row=2)
@@ -78,7 +80,8 @@ class Example(Frame):
                  ('CSV Files', '*.csv'),
                  ('Text Document', '*.txt')]
         file = fd.asksaveasfile(filetypes=files, defaultextension=files)
-        file.write(self.csv)
+        #file.write(str(self.csv))
+        self.csv.to_csv(file)
 
     def get_rows_by_number(self):
 
@@ -141,9 +144,9 @@ class Example(Frame):
 
         frame = self.csv
         columns = frame.columns
-        labelExample = Text(newWindow)
+        labelExample = Text(newWindow, width=150)
         labelExample.insert(1.0, tabulate(frame, headers=columns))
-        labelExample.pack()
+        labelExample.grid(row=2)
 
     def open_file(self):
         file_name = fd.askopenfilename()
