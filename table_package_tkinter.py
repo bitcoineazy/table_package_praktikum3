@@ -10,6 +10,8 @@ import tkinter.ttk as ttk
 
 pandas.options.display.expand_frame_repr = False
 
+# TODO: open,save pickle, txt #
+
 
 class Example(Frame):
     def __init__(self, parent):
@@ -204,13 +206,24 @@ class Example(Frame):
         values = self.value_entry.get()
         column = self.column_entry.get()
         frame = self.csv
-        if type(column) == str:
-            frame.loc[:, column] = values  # Set value for an entire column из документации
-            text = frame
-        elif type(column) == int:
-            column_index = frame.columns[column]
-            frame.loc[:, column_index] = values
-            text = frame
+        try:
+            column1 = int(column)
+        except:
+            column1 = column
+        try:
+            if type(column1) == str:
+                frame.loc[:, column1] = values  # Set value for an entire column из документации
+                text = frame
+            elif type(column1) == int:
+                column_index = frame.columns[column1]
+                frame.loc[:, column_index] = values
+                text = frame
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
+        except TypeError:
+            text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.set_values)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
