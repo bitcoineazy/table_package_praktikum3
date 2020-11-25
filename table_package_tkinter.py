@@ -35,9 +35,9 @@ class Example(Frame):
         self.get_column_types.grid(row=1, column=2)
         self.set_column_types = Button(self, text='set_column_types',command=self.set_column_types, width=16)
         self.set_column_types.grid(row=1, column=3)
-        self.get_values = Button(self, text='get_values', width=16)
+        self.get_values = Button(self, text='get_values',command=self.get_values, width=16)
         self.get_values.grid(row=2, column=3)
-        self.set_values = Button(self, text='set_values', width=16)
+        self.set_values = Button(self, text='set_values', command=self.set_values , width=16)
         self.set_values.grid(row=2, column=2)
 
 
@@ -47,13 +47,15 @@ class Example(Frame):
         self.print_table.grid(row=2, column=1)
         self.open_file = Button(self, command=self.open_file,text='открыть', width=16)
         self.open_file.grid(row=2, column=0)
+        self.functions = Button(self, command=self.functions, text='Функции', width=16)
+        self.functions.grid(row=1, column=4)
         self.pack()
        #self.get_rows_by_number.bind('<Button-1>', self.get_rows_by_number)
         #self.get_rows_by_index.bind('<Button-1>', self.get_rows_by_index)
         #self.get_column_types.bind('<Button-1>', self.get_column_types)
         #self.set_column_types.bind('<Button-1>', self.set_column_types)
-        self.get_values.bind('<Button-1>', self.get_values)
-        self.set_values.bind('<Button-1>', self.set_values)
+       #self.get_values.bind('<Button-1>', self.get_values)
+        #self.set_values.bind('<Button-1>', self.set_values)
         buttonExample = Button(self, text="Open",command=self.print_table, width=16)
         #self.print_table.bind('<Button-1>', self.print_table)
         #self.open_file.comman('<Button-1>', self.open_file)
@@ -232,12 +234,79 @@ class Example(Frame):
         button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
         button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
 
-    def get_values(self, event):
+    def get_values_pandas(self):
+
+        column = self.get_entry.get()
+        column1 = column.split()
+        if type(column) == str:
+            text = self.csv[column]
+            self.csv = text
+
+        #column_index = self.csv.columns[column]
+        #text = self.csv[column_index]
+        self.label = Text(self.get_values)
+        self.label.insert(1.0, text)
+        self.label.grid(row=2)
+
+    def get_values(self):
         print('get_values')
+        self.get_values = Toplevel(self)
+        self.get_label = Label(self.get_values, text="column:")
+        self.get_label.grid(row=0, column=0, sticky="w")
+        self.get_entry = Entry(self.get_values)
+        self.get_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        button_ok = Button(self.get_values, command=self.get_values_pandas, text='OK!', width=3)
+        button_save = Button(self.get_values, command=self.button_save, text='SAVE', width=5)
+        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
 
-
-    def set_values(self, event):
+    def set_values_pandas(self):
         print('set_values')
+        values = self.value_entry.get()
+        column = self.column_entry.get()
+        frame = self.csv
+        if type(column) == str:
+            frame.loc[:, column] = values  # Set value for an entire column из документации
+            text = frame
+        elif type(column) == int:
+            column_index = frame.columns[column]
+            frame.loc[:, column_index] = values
+            text = frame
+
+        self.label = Text(self.set_values)
+        self.label.insert(1.0, text)
+        self.label.grid(row=2)
+
+    def set_values(self):
+        self.set_values = Toplevel(self)
+        self.value_label = Label(self.set_values, text="value:")
+        self.column_label = Label(self.set_values, text='column:')
+        self.value_label.grid(row=0, column=0, sticky="w")
+        self.column_label.grid(row=0, column=2, sticky='w')
+        self.value_entry = Entry(self.set_values)
+        self.column_entry = Entry(self.set_values)
+        self.value_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        self.column_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        button_ok = Button(self.set_values, command=self.set_values_pandas, text='OK!', width=3)
+        button_save = Button(self.set_values, command=self.button_save, text='SAVE', width=5)
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+
+    def functions(self):
+        # eq (==), gr (>), ls (<), ge (>=), le (<=), ne (!=)
+        self.functions = Toplevel(self)
+        self.eq_button = Button(self.functions, text='Equall ==', width=16)
+        self.gr_button = Button(self.functions, text='Greater >', width=16)
+        self.ls_button = Button(self.functions, text='Less <', width=16)
+        self.ge_button = Button(self.functions, text='G or E >=', width=16)
+        self.le_button = Button(self.functions, text='L or E <=', width=16)
+        self.ne_button = Button(self.functions, text='Not Eq !=', width=16)
+        self.eq_button.grid(row=0, column=0)
+        self.gr_button.grid(row=0, column=1)
+        self.ls_button.grid(row=0, column=2)
+        self.ge_button.grid(row=1, column=0)
+        self.le_button.grid(row=1, column=1)
+        self.ne_button.grid(row=1, column=2)
 
 
     def print_table(self):
@@ -263,7 +332,7 @@ class Example(Frame):
 
 
     def centerWindow(self):
-        w = 488
+        w = 610
         h = 60
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
