@@ -164,10 +164,25 @@ class Example(Frame):
 
     def get_values_pandas(self):
         column = self.get_entry.get()
-        column1 = column.split()
-        if type(column) == str:
-            text = self.csv[column]
-            self.csv = text
+        frame = self.csv
+        try:
+            column1 = int(column)
+        except:
+            column1 = column
+        try:
+            if type(column1) == str:
+                text = frame[column]
+                self.csv = text
+            elif type(column1) == int:
+                column_index = frame.columns[column1]
+                text = frame[column_index]
+                self.csv = text
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
+        except TypeError:
+            text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.get_values)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -232,20 +247,39 @@ class Example(Frame):
         self.ne_button.grid(row=1, column=2)
 
     def equall_pandas(self):
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         frame = self.csv
         pandas.options.display.max_rows = len(frame)
-        if type(column1) == str:
-            equality = frame[column1] == frame[column2]
-            frame['equally'] = equality
-            text = frame['equally']
-        elif type(column1) == int:
-            column_index_1 = frame.columns[column2]
-            column_index_2 = frame.columns[column2]
-            equality = frame[column_index_1] == frame[column_index_2]
-            frame['equally'] = equality
-            text = frame['equally']
+        try:
+            if type(column1) == str:
+            #try:
+                equality = frame[column1] == frame[column2]
+                frame['equally'] = equality
+                text = frame['equally']
+                '''except:
+                    column_index_1 = frame.columns[column1]
+                    column_index_2 = frame.columns[column2]
+                    equality = frame[column_index_1] == frame[column_index_2]
+                    frame['equally'] = equality
+                    text = frame['equally']'''
+
+            elif type(column2) == int:
+                column_index_1 = frame.columns[column1]
+                column_index_2 = frame.columns[column2]
+                equality = frame[column_index_1] == frame[column_index_2]
+                frame['equally'] = equality
+                text = frame['equally']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.equall)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -266,9 +300,15 @@ class Example(Frame):
         button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
 
     def greater_pandas(self):
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         frame = self.csv
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
         pandas.options.display.max_rows = len(frame)
         try:
             if type(column1) == str:
@@ -282,8 +322,12 @@ class Example(Frame):
                 greater_than = frame[column_index_1] > frame[column_index_2]
                 frame['greater'] = greater_than
                 text = frame['greater']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
         except TypeError:
             text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.greater)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -305,22 +349,33 @@ class Example(Frame):
 
     def less_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         pandas.options.display.max_rows = len(frame)
         try:
             if type(column1) == str:
-                less_than = frame[column1] < frame[column2]
-                frame['less'] = less_than
-                text = frame['less']
+                greater_than = frame[column1] < frame[column2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+                self.csv = frame
             elif type(column1) == int:
                 column_index_1 = frame.columns[column1]
                 column_index_2 = frame.columns[column2]
-                less_than = frame[column_index_1] < frame[column_index_2]
-                frame['less'] = less_than
-                text = frame['less']
+                greater_than = frame[column_index_1] < frame[column_index_2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
         except TypeError:
             text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.less)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -342,22 +397,33 @@ class Example(Frame):
 
     def gr_or_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         pandas.options.display.max_rows = len(frame)
         try:
             if type(column1) == str:
-                ge = frame[column1] >= frame[column2]
-                frame['greater_or_equally'] = ge
-                text = frame['greater_or_equally']
+                greater_than = frame[column1] >= frame[column2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+                self.csv = frame
             elif type(column1) == int:
                 column_index_1 = frame.columns[column1]
                 column_index_2 = frame.columns[column2]
-                ge = frame[column_index_1] >= frame[column_index_2]
-                frame['greater_or_equally'] = ge
-                text = frame['greater_or_equally']
+                greater_than = frame[column_index_1] >= frame[column_index_2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
         except TypeError:
             text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.gr_or_eq)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -379,22 +445,33 @@ class Example(Frame):
 
     def ls_or_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         pandas.options.display.max_rows = len(frame)
         try:
             if type(column1) == str:
-                le = frame[column1] <= frame[column2]
-                frame['less_or_equally'] = le
-                text = frame['less_or_equally']
+                greater_than = frame[column1] <= frame[column2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+                self.csv = frame
             elif type(column1) == int:
                 column_index_1 = frame.columns[column1]
                 column_index_2 = frame.columns[column2]
-                le = frame[column_index_1] <= frame[column_index_2]
-                frame['less_or_equally'] = le
-                text = frame['less_or_equally']
+                greater_than = frame[column_index_1] <= frame[column_index_2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
         except TypeError:
             text = 'Сравниваемые столбцы не должны быть строками и числами'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.ls_or_eq)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
@@ -416,19 +493,31 @@ class Example(Frame):
 
     def not_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get()
-        column2 = self.second_entry.get()
+        column1 = self.first_entry.get().lower()
+        column2 = self.second_entry.get().lower()
+        try:
+            column1 = int(column1)
+            column2 = int(column2)
+        except:
+            column1 = column1
+            column2 = column2
         pandas.options.display.max_rows = len(frame)
-        if type(column1) == str:
-            ne = frame[column1] != frame[column2]
-            frame['not_equall'] = ne
-            text = frame['not_equall']
-        elif type(column1) == int:
-            column_index_1 = frame.columns[column1]
-            column_index_2 = frame.columns[column2]
-            ne = frame[column_index_1] != frame[column_index_2]
-            frame['not_equall'] = ne
-            text = frame['not_equall']
+        try:
+            if type(column1) == str:
+                greater_than = frame[column1] != frame[column2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+                self.csv = frame
+            elif type(column1) == int:
+                column_index_1 = frame.columns[column1]
+                column_index_2 = frame.columns[column2]
+                greater_than = frame[column_index_1] != frame[column_index_2]
+                frame['greater'] = greater_than
+                text = frame['greater']
+        except KeyError:
+            text = 'Введите столбцы, которые есть в таблице'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         self.label = Text(self.not_eq)
         self.label.insert(1.0, text)
         self.label.grid(row=2)
