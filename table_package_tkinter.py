@@ -61,13 +61,6 @@ class Example(Frame):
         label.insert(1.0, tabulate(text1, headers=columns))
         label.grid(row=2)
 
-    def button_save(self):
-        files = [('All Files', '*.*'),
-                 ('CSV Files', '*.csv'),
-                 ('Text Document', '*.txt')]
-        file = fd.asksaveasfile(filetypes=files, defaultextension=files)
-        self.csv.to_csv(file)
-
     def get_rows_by_number(self):
         self.newWindow = Toplevel(self)
         start_type = IntVar()
@@ -559,10 +552,23 @@ class Example(Frame):
         labelExample.insert(1.0, tabulate(frame, headers=columns))
         labelExample.grid(row=2)
 
+    def button_save(self):
+        files = [('CSV Files', '*.csv'),
+                 ('Text Document', '*.txt'),
+                 ('Pickle Files', '*.pickle')]
+        file = fd.asksaveasfile(filetypes=files, defaultextension=files)
+        self.csv.to_pickle(file)
+
     def open_file(self):
-        file_name = fd.askopenfilename()
-        self.csv = pandas.read_csv(file_name)
+        files = [('CSV Files', '*.csv'),
+                 ('Text Document', '*.txt')]
+        file_name = fd.askopenfilename(filetypes=files, defaultextension=files)
+        if '.csv' in file_name:
+            self.csv = pandas.read_csv(file_name)
+        elif '.pickle' in file_name:
+            pass
         pandas.options.display.max_rows = len(self.csv)
+        #if
 
     def centerWindow(self):
         w = 610
