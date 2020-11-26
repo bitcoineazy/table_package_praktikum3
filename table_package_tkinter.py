@@ -7,11 +7,7 @@ from tkinter import filedialog as fd
 from tabulate import tabulate
 from IPython.display import HTML, display
 import tkinter.ttk as ttk
-
 pandas.options.display.expand_frame_repr = False
-
-# TODO: open,save pickle, txt #
-
 
 class Example(Frame):
     def __init__(self, parent):
@@ -555,18 +551,30 @@ class Example(Frame):
     def button_save(self):
         files = [('CSV Files', '*.csv'),
                  ('Text Document', '*.txt'),
-                 ('Pickle Files', '*.pickle')]
-        file = fd.asksaveasfile(filetypes=files, defaultextension=files)
-        self.csv.to_pickle(file)
+                 ('Pickle Files', '*.pkl')]
+        file_name = fd.asksaveasfile(filetypes=files, defaultextension=files)
+        if '.csv' in str(file_name):
+            self.csv.to_csv(file_name)
+        elif '.pkl' in str(file_name):
+            with open(file_name.name, 'wb') as file_obj:
+                pickle.dump(self.csv, file_obj)
+        elif '.txt' in str(file_name):
+            with open(file_name.name, 'a') as file_obj:
+                file_obj.write(
+                    self.csv.to_string(header=False, index=False)
+                )
 
     def open_file(self):
         files = [('CSV Files', '*.csv'),
-                 ('Text Document', '*.txt')]
+                 ('Text Document', '*.txt'),
+                 ('Pickle Files', '*.pkl')]
         file_name = fd.askopenfilename(filetypes=files, defaultextension=files)
         if '.csv' in file_name:
             self.csv = pandas.read_csv(file_name)
-        elif '.pickle' in file_name:
-            pass
+        elif '.pkl' in file_name:
+            self.csv = pandas.read_pickle(file_name)
+        elif '.txt' in file_name:
+            self.csv = pandas.read_csv(file_name)
         pandas.options.display.max_rows = len(self.csv)
         #if
 
@@ -579,15 +587,11 @@ class Example(Frame):
         y = (sh - h) / 2
         self.parent.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
-
 def main():
     root = Tk()
     ex = Example(root)
     root.mainloop()
 
-
 if __name__ == '__main__':
     main()
-
-
 
