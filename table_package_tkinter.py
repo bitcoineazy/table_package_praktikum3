@@ -543,9 +543,9 @@ class Example(Frame):
         print('print_table')
         newWindow = Toplevel(self)
         frame = self.csv
-        columns = frame.columns
+        frame_columns = frame.columns
         labelExample = Text(newWindow, width=150)
-        labelExample.insert(1.0, tabulate(frame, headers=columns))
+        labelExample.insert(1.0, tabulate(frame, headers=frame_columns))
         labelExample.grid(row=2)
 
     def button_save(self):
@@ -557,7 +557,8 @@ class Example(Frame):
             self.csv.to_csv(file_name)
         elif '.pkl' in str(file_name):
             with open(file_name.name, 'wb') as file_obj:
-                pickle.dump(self.csv, file_obj)
+                self.csv.to_pickle(file_obj)
+                #pickle.dump(self.csv, file_obj)
         elif '.txt' in str(file_name):
             with open(file_name.name, 'a') as file_obj:
                 file_obj.write(
