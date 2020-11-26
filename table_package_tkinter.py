@@ -38,6 +38,8 @@ class Example(Frame):
         self.open_file.grid(row=2, column=0)
         self.functions = Button(self, command=self.functions, text='Функции', width=16)
         self.functions.grid(row=1, column=4)
+        self.filter_rows = Button(self, command=self.filter_rows, text='filter_rows', width=16)
+        self.filter_rows.grid(row=2, column=4)
         self.pack()
 
     def get_rows_by_number_new_window(self):
@@ -538,6 +540,33 @@ class Example(Frame):
         button_save = Button(self.not_eq, command=self.button_save, text='SAVE', width=5)
         button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
         button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+
+    def filter_rows_pandas(self):
+        frame = self.csv
+        bool_list = self.bool_list_entry.get()
+        try:
+            bool_list = frame.loc[frame[bool_list] == True]
+            self.csv = bool_list
+        except KeyError:
+            bool_list = 'Введите столбцы, которые есть в таблице'
+        except IndexError:
+            bool_list = 'Введите столбцы, которые есть в таблице'
+        self.label.insert(1.0, bool_list)
+
+
+    def filter_rows(self):
+        self.filter_rows = Toplevel(self)
+        self.bool_list_label = Label(self.filter_rows, text='Boolean column:')
+        self.bool_list_entry = Entry(self.filter_rows)
+        self.bool_list_label.grid(row=0, column=0, sticky="w")
+        self.bool_list_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        button_ok = Button(self.filter_rows, command=self.filter_rows_pandas, text='OK!', width=3)
+        button_save = Button(self.filter_rows, command=self.button_save, text='SAVE', width=5)
+        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        self.label = Text(self.filter_rows)
+        self.label.insert(1.0, 'Column может являться функцией [equally, greater, less, greater_or_equally, less_or_equally, not_equall]')
+        self.label.grid(row=2)
 
     def print_table(self):
         print('print_table')
