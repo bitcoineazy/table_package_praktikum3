@@ -40,70 +40,78 @@ class Example(Frame):
         self.functions.grid(row=1, column=4)
         self.filter_rows = Button(self, command=self.filter_rows, text='filter_rows', width=16)
         self.filter_rows.grid(row=2, column=4)
+        self.refresh_button = Button(self, command=self.refresh_button, text='Обновить', width=16)
+        self.refresh_button.grid(row=1, column=5)
+        self.instruction = Button(self, command=self.instruction, text='Инструкция', width=16)
+        self.instruction.grid(row=2, column=5)
         self.pack()
 
     def get_rows_by_number_new_window(self):
         frame = self.csv
         start = int(self.start_arg_entry.get())
         stop = int(self.stop_arg_entry.get())
-        copy_table = bool(self.copy_table_entry.get())
-        copy_table = True
-        if copy_table == True:
-            text1 = frame[start:stop + 1]
-            self.csv = frame[start:stop + 1]
-        elif copy_table == False:
-            text1 = frame[start:stop + 1]
-            self.csv = frame[start:stop + 1]
-        label = Text(self.newWindow, width=150)
+        text1 = frame[start:stop + 1]
+        self.csv = frame[start:stop + 1]
+
         columns = text1.columns
-        label.insert(1.0, tabulate(text1, headers=columns))
-        label.grid(row=2)
+        self.label.insert(1.0, tabulate(text1, headers=columns))
+
 
     def get_rows_by_number(self):
+        info = 'get_rows_by_number(start, [stop], copy_table=False) – получение таблицы из одной строки или из строк из интервала по номеру строки.' \
+               ' Функция либо копирует исходные данные, либо создает новое представление таблицы, работающее с исходным набором данных (copy_table=False),' \
+               ' таким образом изменения, внесенные через это представления будут наблюдаться и в исходной таблице.'
         self.newWindow = Toplevel(self)
+        self.newWindow.title("get_rows_by_number")
         start_type = IntVar()
         stop_type = IntVar()
         copy_type = BooleanVar()
         start_arg_label = Label(self.newWindow,text="start:")
         stop_arg_label = Label(self.newWindow, text="stop:")
-        copy_table_label = Label(self.newWindow, text='copy_table:')
-        start_arg_label.grid(row=0, column=0, sticky="w")
-        stop_arg_label.grid(row=0, column=2, sticky="w")
-        copy_table_label.grid(row=0, column=4, sticky="w")
+        start_arg_label.grid(row=0, column=0, sticky="e")
+        stop_arg_label.grid(row=0, column=2, sticky="e")
         self.start_arg_entry = Entry(self.newWindow, textvariable=start_type)
         self.stop_arg_entry = Entry(self.newWindow, textvariable=stop_type)
-        self.copy_table_entry = Entry(self.newWindow, textvariable=copy_type)
-        self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="w")
-        self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5, sticky="w")
-        self.copy_table_entry.grid(row=0,column=5, padx=5, pady=5, sticky="w")
+        self.start_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="e")
+        self.stop_arg_entry.grid(row=0,column=3, padx=5, pady=5, sticky="e")
+        self.label = Text(self.newWindow, width=150)
+        self.label.insert(1.0, info)
+        self.label.grid(row=2)
         button = Button(self.newWindow, command=self.get_rows_by_number_new_window, text='OK!', width=3)
         button_save = Button(self.newWindow, command=self.button_save, text='SAVE', width=5)
-        button.grid(row=0, column=6, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=7, padx=5, pady=5, sticky="w")
+        button.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
         self.mainloop()
 
     def get_rows_by_index_pandas(self):
         key = self.values_arg_entry.get()
         split = key.split(',')
-        print(pandas.concat([self.csv[split]], ignore_index=True))
+        #print(pandas.concat([self.csv[split]], ignore_index=True))
         text = pandas.concat([self.csv[split]])
-        label = Text(self.by_index, width=150)
         columns = self.csv.columns
         self.csv = text
-        label.insert(1.0, text)
-        label.grid(row=2)
+        self.label.insert(1.0, text)
+
 
     def get_rows_by_index(self):
-        print('get_rows_by_index')
+        info = 'get_rows_by_index(val1, … , copy_table=False) – получение новой таблицы из одной строки или из строк со' \
+               ' значениями в первом столбце, совпадающими с переданными аргументами val1, … , valN. Функция либо копирует ' \
+               'исходные данные, либо создает новое представление таблицы, работающее с исходным набором данных (copy_table=False),' \
+               ' таким образом изменения, внесенные через это представления будут наблюдаться и в исходной таблице.' \
+               '\n\n\nВводить стольцы через запятую!'
         self.by_index = Toplevel(self)
+        self.by_index.title("get_rows_by_index")
         values_arg_label = Label(self.by_index,text="values:")
         copy_table_label = Label(self.by_index, text='copy_table:')
-        values_arg_label.grid(row=0, column=0, sticky="w")
-        copy_table_label.grid(row=0, column=2, sticky="w")
+        values_arg_label.grid(row=0, column=0, sticky="e")
+        copy_table_label.grid(row=0, column=2, sticky="e")
         self.values_arg_entry = Entry(self.by_index)
         self.copy_table_entry = Entry(self.by_index)
-        self.values_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="w")
-        self.copy_table_entry.grid(row=0,column=3, padx=5, pady=5, sticky="w")
+        self.values_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="e")
+        self.copy_table_entry.grid(row=0,column=3, padx=5, pady=5, sticky="e")
+        self.label = Text(self.by_index, width=150)
+        self.label.insert(1.0, info)
+        self.label.grid(row=2)
         button_ok = Button(self.by_index, command=self.get_rows_by_index_pandas, text='OK!', width=3)
         button_save = Button(self.by_index, command=self.button_save, text='SAVE', width=5)
         button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
@@ -111,13 +119,17 @@ class Example(Frame):
 
     def get_column_types(self):
         #by_number - built-in
-        print('get_column_types')
+        info='\n\n\n\nget_column_types(by_number=True) – получение словаря вида столбец:тип_значений. ' \
+             'Тип значения: int, float, bool, str (по умолчанию для всех столбцов). Параметр by_number ' \
+             'определяет вид значения столбец – целочисленный индекс столбца или его строковое представление.'
         self.column_types = Toplevel(self)
+        self.column_types.title("get_column_types")
         buffer = io.StringIO()
         self.csv.info(buf=buffer, null_counts=False, memory_usage=False)
         text = buffer.getvalue()
         label = Text(self.column_types)
         label.insert(1.0, text)
+        label.insert(END, info)
         label.grid(row=2)
 
     def set_column_types_pandas(self):
@@ -139,21 +151,25 @@ class Example(Frame):
             frame_show = self.csv.select_dtypes(include=['object'])
             frame_show.info(buf=buffer, null_counts=False, memory_usage=False)
             text = buffer.getvalue()
-        self.label = Text(self.column_types_set)
         self.label.insert(1.0, text)
-        self.label.grid(row=2)
 
     def set_column_types(self):
-        print('set_column_types')
+        info='set_column_types(types_dict, by_number=True) – задание словаря вида столбец:тип_значений.' \
+             ' Тип значения: int, float, bool, str (по умолчанию для всех столбцов). Параметр by_number определяет ' \
+             'вид значения столбец – целочисленный индекс столбца или его строковое представление.'
         self.column_types_set = Toplevel(self)
+        self.column_types_set.title("column_types_set")
         self.set_label = Label(self.column_types_set, text="types_dict:")
-        self.set_label.grid(row=0, column=0, sticky="w")
+        self.set_label.grid(row=0, column=0, sticky="e")
         self.set_entry = Entry(self.column_types_set)
-        self.set_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        self.set_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
         button_ok = Button(self.column_types_set, command=self.set_column_types_pandas, text='OK!', width=3)
         button_save = Button(self.column_types_set, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        self.label = Text(self.column_types_set)
+        self.label.insert(1.0, info)
+        self.label.grid(row=2)
 
     def get_values_pandas(self):
         column = self.get_entry.get()
@@ -176,24 +192,28 @@ class Example(Frame):
             text = 'Сравниваемые столбцы не должны быть строками и числами'
         except IndexError:
             text = 'Введите столбцы, которые есть в таблице'
-        self.label = Text(self.get_values)
         self.label.insert(1.0, text)
-        self.label.grid(row=2)
 
     def get_values(self):
-        print('get_values')
+        info='get_values(column=0) – получение списка значений ' \
+             '(типизированных согласно типу столбца) таблицы из ' \
+             'столбца либо по номеру столбца (целое число, значение ' \
+             'по умолчанию 0, либо по имени столбца)'
         self.get_values = Toplevel(self)
+        self.get_values.title("get_values")
         self.get_label = Label(self.get_values, text="column:")
-        self.get_label.grid(row=0, column=0, sticky="w")
+        self.get_label.grid(row=0, column=0, sticky="e")
         self.get_entry = Entry(self.get_values)
-        self.get_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        self.get_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
         button_ok = Button(self.get_values, command=self.get_values_pandas, text='OK!', width=3)
         button_save = Button(self.get_values, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        self.label = Text(self.get_values)
+        self.label.insert(1.0, info)
+        self.label.grid(row=2)
 
     def set_values_pandas(self):
-        print('set_values')
         values = self.value_entry.get()
         column = self.column_entry.get()
         frame = self.csv
@@ -215,24 +235,28 @@ class Example(Frame):
             text = 'Сравниваемые столбцы не должны быть строками и числами'
         except IndexError:
             text = 'Введите столбцы, которые есть в таблице'
-        self.label = Text(self.set_values)
         self.label.insert(1.0, text)
-        self.label.grid(row=2)
 
     def set_values(self):
+        info = 'set_values(values, column=0) – задание списка значений values для столбца таблицы' \
+               ' (типизированных согласно типу столбца) либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца).'
         self.set_values = Toplevel(self)
+        self.set_values.title("set_values")
         self.value_label = Label(self.set_values, text="value:")
         self.column_label = Label(self.set_values, text='column:')
-        self.value_label.grid(row=0, column=0, sticky="w")
-        self.column_label.grid(row=0, column=2, sticky='w')
+        self.value_label.grid(row=0, column=0, sticky="e")
+        self.column_label.grid(row=0, column=2, sticky='e')
         self.value_entry = Entry(self.set_values)
         self.column_entry = Entry(self.set_values)
-        self.value_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.column_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.value_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.column_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
+        self.label = Text(self.set_values)
+        self.label.insert(1.0, info)
+        self.label.grid(row=2)
         button_ok = Button(self.set_values, command=self.set_values_pandas, text='OK!', width=3)
         button_save = Button(self.set_values, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def functions(self):
         # eq (==), gr (>), ls (<), ge (>=), le (<=), ne (!=)
@@ -294,14 +318,14 @@ class Example(Frame):
         self.second_col_label = Label(self.equall, text='Column 2:')
         self.first_entry = Entry(self.equall)
         self.second_entry = Entry(self.equall)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.equall, command=self.equall_pandas, text='OK!', width=3)
         button_save = Button(self.equall, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def greater_pandas(self):
         column1 = self.first_entry.get().lower()
@@ -342,14 +366,14 @@ class Example(Frame):
         self.second_col_label = Label(self.greater, text='Column 2:')
         self.first_entry = Entry(self.greater)
         self.second_entry = Entry(self.greater)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.greater, command=self.greater_pandas, text='OK!', width=3)
         button_save = Button(self.greater, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def less_pandas(self):
         frame = self.csv
@@ -390,14 +414,14 @@ class Example(Frame):
         self.second_col_label = Label(self.less, text='Column 2:')
         self.first_entry = Entry(self.less)
         self.second_entry = Entry(self.less)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.less, command=self.less_pandas, text='OK!', width=3)
         button_save = Button(self.less, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def gr_or_eq_pandas(self):
         frame = self.csv
@@ -438,14 +462,14 @@ class Example(Frame):
         self.second_col_label = Label(self.gr_or_eq, text='Column 2:')
         self.first_entry = Entry(self.gr_or_eq)
         self.second_entry = Entry(self.gr_or_eq)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.gr_or_eq, command=self.gr_or_eq_pandas, text='OK!', width=3)
         button_save = Button(self.gr_or_eq, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def ls_or_eq_pandas(self):
         frame = self.csv
@@ -486,14 +510,14 @@ class Example(Frame):
         self.second_col_label = Label(self.ls_or_eq, text='Column 2:')
         self.first_entry = Entry(self.ls_or_eq)
         self.second_entry = Entry(self.ls_or_eq)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.ls_or_eq, command=self.ls_or_eq_pandas, text='OK!', width=3)
         button_save = Button(self.ls_or_eq, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def not_eq_pandas(self):
         frame = self.csv
@@ -532,14 +556,14 @@ class Example(Frame):
         self.second_col_label = Label(self.not_eq, text='Column 2:')
         self.first_entry = Entry(self.not_eq)
         self.second_entry = Entry(self.not_eq)
-        self.first_col_label.grid(row=0, column=0, sticky="w")
-        self.second_col_label.grid(row=0, column=2, sticky="w")
-        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        self.first_col_label.grid(row=0, column=0, sticky="e")
+        self.second_col_label.grid(row=0, column=2, sticky="e")
+        self.first_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
+        self.second_entry.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_ok = Button(self.not_eq, command=self.not_eq_pandas, text='OK!', width=3)
         button_save = Button(self.not_eq, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def filter_rows_pandas(self):
         frame = self.csv
@@ -558,12 +582,12 @@ class Example(Frame):
         self.filter_rows = Toplevel(self)
         self.bool_list_label = Label(self.filter_rows, text='Boolean column:')
         self.bool_list_entry = Entry(self.filter_rows)
-        self.bool_list_label.grid(row=0, column=0, sticky="w")
-        self.bool_list_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        self.bool_list_label.grid(row=0, column=0, sticky="e")
+        self.bool_list_entry.grid(row=0, column=1, padx=5, pady=5, sticky="e")
         button_ok = Button(self.filter_rows, command=self.filter_rows_pandas, text='OK!', width=3)
         button_save = Button(self.filter_rows, command=self.button_save, text='SAVE', width=5)
-        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="w")
-        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="e")
+        button_save.grid(row=0, column=4, padx=5, pady=5, sticky="e")
         self.label = Text(self.filter_rows)
         self.label.insert(1.0, 'Column может являться функцией [equally, greater, less, greater_or_equally, less_or_equally, not_equall]')
         self.label.grid(row=2)
@@ -598,18 +622,41 @@ class Example(Frame):
         files = [('CSV Files', '*.csv'),
                  ('Text Document', '*.txt'),
                  ('Pickle Files', '*.pkl')]
-        file_name = fd.askopenfilename(filetypes=files, defaultextension=files)
-        if '.csv' in file_name:
-            self.csv = pandas.read_csv(file_name)
-        elif '.pkl' in file_name:
-            self.csv = pandas.read_pickle(file_name)
-        elif '.txt' in file_name:
-            self.csv = pandas.read_csv(file_name)
+        self.file_name = fd.askopenfilename(filetypes=files, defaultextension=files)
+        if '.csv' in self.file_name:
+            self.csv = pandas.read_csv(self.file_name)
+        elif '.pkl' in self.file_name:
+            self.csv = pandas.read_pickle(self.file_name)
+        elif '.txt' in self.file_name:
+            self.csv = pandas.read_csv(self.file_name)
         pandas.options.display.max_rows = len(self.csv)
-        #if
+
+    def refresh_button(self):
+        if '.csv' in self.file_name:
+            self.csv = pandas.read_csv(self.file_name)
+        elif '.pkl' in self.file_name:
+            self.csv = pandas.read_pickle(self.file_name)
+        elif '.txt' in self.file_name:
+            self.csv = pandas.read_csv(self.file_name)
+
+    def instruction(self):
+        self.instruction = Toplevel(self)
+        instruction_text = Text(self.instruction)
+        text = 'Инструкция:\n\n!После выполнения каждой функции надо нажать на главном окне обновить!\n\n\n' \
+               'Описание работы функций:eq (==), gr (>), ls (<), ge (>=), le (<=), ne (==),' \
+               ' которые возвращают список булевских значений длинной в количество строк сравниваемых столбцов.' \
+               ' Реализовать функцию filter_rows (bool_list, copy_table=False) – получение новой таблицы из строк ' \
+               'для которых в bool_list (длинной в количество строк в таблице) находится значение True.\n\n\n' \
+                'Имена новых столбцов при выполнении функций:eq (==), gr (>), ls (<), ge (>=), le (<=), ne (==)' \
+               'и сохранении в файл находятся в окне функции filter_rows\n\n\n' \
+               'Программа работает с файлами типа .csv, .pkl, .txt\n' \
+               'Чтобы сохранить результат выполнения функции - надо нажать SAVE в окне'
+
+        instruction_text.insert(1.0, text)
+        instruction_text.grid(row=1)
 
     def centerWindow(self):
-        w = 610
+        w = 732
         h = 60
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
