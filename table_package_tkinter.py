@@ -52,10 +52,8 @@ class Example(Frame):
         stop = int(self.stop_arg_entry.get())
         text1 = frame[start:stop + 1]
         self.csv = frame[start:stop + 1]
-
         columns = text1.columns
         self.label.insert(1.0, tabulate(text1, headers=columns))
-
 
     def get_rows_by_number(self):
         info = 'get_rows_by_number(start, [stop], copy_table=False) – получение таблицы из одной строки или из строк из интервала по номеру строки.' \
@@ -86,12 +84,18 @@ class Example(Frame):
     def get_rows_by_index_pandas(self):
         key = self.values_arg_entry.get()
         split = key.split(',')
-        #print(pandas.concat([self.csv[split]], ignore_index=True))
-        text = pandas.concat([self.csv[split]])
+        try:
+            text = pandas.concat([self.csv[split]])
+        except KeyError:
+            self.label.delete(0.0, END)
+            text = 'Введите столбцы строкой(, через запятую)'
+        except AttributeError:
+            text = 'Введите столбцы, которые есть в таблице'
+        except IndexError:
+            text = 'Введите столбцы, которые есть в таблице'
         columns = self.csv.columns
         self.csv = text
         self.label.insert(1.0, text)
-
 
     def get_rows_by_index(self):
         info = 'get_rows_by_index(val1, … , copy_table=False) – получение новой таблицы из одной строки или из строк со' \
@@ -102,13 +106,9 @@ class Example(Frame):
         self.by_index = Toplevel(self)
         self.by_index.title("get_rows_by_index")
         values_arg_label = Label(self.by_index,text="values:")
-        copy_table_label = Label(self.by_index, text='copy_table:')
         values_arg_label.grid(row=0, column=0, sticky="e")
-        copy_table_label.grid(row=0, column=2, sticky="e")
         self.values_arg_entry = Entry(self.by_index)
-        self.copy_table_entry = Entry(self.by_index)
         self.values_arg_entry.grid(row=0,column=1, padx=5, pady=5, sticky="e")
-        self.copy_table_entry.grid(row=0,column=3, padx=5, pady=5, sticky="e")
         self.label = Text(self.by_index, width=150)
         self.label.insert(1.0, info)
         self.label.grid(row=2)
@@ -651,7 +651,6 @@ class Example(Frame):
                'и сохранении в файл находятся в окне функции filter_rows\n\n\n' \
                'Программа работает с файлами типа .csv, .pkl, .txt\n' \
                'Чтобы сохранить результат выполнения функции - надо нажать SAVE в окне'
-
         instruction_text.insert(1.0, text)
         instruction_text.grid(row=1)
 
