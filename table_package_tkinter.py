@@ -9,7 +9,8 @@ from IPython.display import HTML, display
 import tkinter.ttk as ttk
 pandas.options.display.expand_frame_repr = False
 
-class Example(Frame):
+
+class TablePackage(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent, background="white")
         self.parent = parent
@@ -19,7 +20,6 @@ class Example(Frame):
         self.initUI()
 
     def initUI(self):
-        self.entry = Label(self, width=50, height=50)
         self.get_rows_by_number = Button(self, text='get_rows_by_number', command=self.get_rows_by_number, width=16)
         self.get_rows_by_number.grid(row=1, column=0)
         self.get_rows_by_index = Button(self, text='get_rows_by_index', command=self.get_rows_by_index , width=16)
@@ -44,7 +44,7 @@ class Example(Frame):
         self.refresh_button.grid(row=1, column=5)
         self.instruction = Button(self, command=self.instruction, text='Инструкция', width=16)
         self.instruction.grid(row=2, column=5)
-        self.pack()
+
 
     def get_rows_by_number_new_window(self):
         frame = self.csv
@@ -56,7 +56,7 @@ class Example(Frame):
         self.label.insert(1.0, tabulate(text1, headers=columns))
 
     def get_rows_by_number(self):
-        info = 'get_rows_by_number(start, [stop], copy_table=False) – получение таблицы из одной строки или из строк из интервала по номеру строки.' \
+        info = '\n\n\nget_rows_by_number(start, [stop], copy_table=False) – получение таблицы из одной строки или из строк из интервала по номеру строки.' \
                ' Функция либо копирует исходные данные, либо создает новое представление таблицы, работающее с исходным набором данных (copy_table=False),' \
                ' таким образом изменения, внесенные через это представления будут наблюдаться и в исходной таблице.'
         self.newWindow = Toplevel(self)
@@ -79,7 +79,7 @@ class Example(Frame):
         button_save = Button(self.newWindow, command=self.button_save, text='SAVE', width=5)
         button.grid(row=0, column=4, padx=5, pady=5, sticky="w")
         button_save.grid(row=0, column=5, padx=5, pady=5, sticky="w")
-        self.mainloop()
+
 
     def get_rows_by_index_pandas(self):
         key = self.values_arg_entry.get()
@@ -98,7 +98,7 @@ class Example(Frame):
         self.label.insert(1.0, text)
 
     def get_rows_by_index(self):
-        info = 'get_rows_by_index(val1, … , copy_table=False) – получение новой таблицы из одной строки или из строк со' \
+        info = '\n\n\nget_rows_by_index(val1, … , copy_table=False) – получение новой таблицы из одной строки или из строк со' \
                ' значениями в первом столбце, совпадающими с переданными аргументами val1, … , valN. Функция либо копирует ' \
                'исходные данные, либо создает новое представление таблицы, работающее с исходным набором данных (copy_table=False),' \
                ' таким образом изменения, внесенные через это представления будут наблюдаться и в исходной таблице.' \
@@ -119,9 +119,10 @@ class Example(Frame):
 
     def get_column_types(self):
         #by_number - built-in
-        info='\n\n\n\nget_column_types(by_number=True) – получение словаря вида столбец:тип_значений. ' \
+        info='\n\n\nget_column_types(by_number=True) – получение словаря вида столбец:тип_значений. ' \
              'Тип значения: int, float, bool, str (по умолчанию для всех столбцов). Параметр by_number ' \
-             'определяет вид значения столбец – целочисленный индекс столбца или его строковое представление.'
+             'определяет вид значения столбец – целочисленный индекс столбца или его строковое представление.' \
+             '\n\n\n'
         self.column_types = Toplevel(self)
         self.column_types.title("get_column_types")
         buffer = io.StringIO()
@@ -154,9 +155,10 @@ class Example(Frame):
         self.label.insert(1.0, text)
 
     def set_column_types(self):
-        info='set_column_types(types_dict, by_number=True) – задание словаря вида столбец:тип_значений.' \
+        info='\n\n\nset_column_types(types_dict, by_number=True) – задание словаря вида столбец:тип_значений.' \
              ' Тип значения: int, float, bool, str (по умолчанию для всех столбцов). Параметр by_number определяет ' \
-             'вид значения столбец – целочисленный индекс столбца или его строковое представление.'
+             'вид значения столбец – целочисленный индекс столбца или его строковое представление.' \
+             '\n\n\ntypes_dict:int, float, bool, str'
         self.column_types_set = Toplevel(self)
         self.column_types_set.title("column_types_set")
         self.set_label = Label(self.column_types_set, text="types_dict:")
@@ -195,7 +197,7 @@ class Example(Frame):
         self.label.insert(1.0, text)
 
     def get_values(self):
-        info='get_values(column=0) – получение списка значений ' \
+        info='\n\n\nget_values(column=0) – получение списка значений ' \
              '(типизированных согласно типу столбца) таблицы из ' \
              'столбца либо по номеру столбца (целое число, значение ' \
              'по умолчанию 0, либо по имени столбца)'
@@ -238,7 +240,7 @@ class Example(Frame):
         self.label.insert(1.0, text)
 
     def set_values(self):
-        info = 'set_values(values, column=0) – задание списка значений values для столбца таблицы' \
+        info = '\n\n\nset_values(values, column=0) – задание списка значений values для столбца таблицы' \
                ' (типизированных согласно типу столбца) либо по номеру столбца (целое число, значение по умолчанию 0, либо по имени столбца).'
         self.set_values = Toplevel(self)
         self.set_values.title("set_values")
@@ -275,8 +277,8 @@ class Example(Frame):
         self.ne_button.grid(row=1, column=2)
 
     def equall_pandas(self):
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -284,20 +286,11 @@ class Example(Frame):
             column1 = column1
             column2 = column2
         frame = self.csv
-        pandas.options.display.max_rows = len(frame)
         try:
             if type(column1) == str:
-            #try:
                 equality = frame[column1] == frame[column2]
                 frame['equally'] = equality
                 text = frame['equally']
-                '''except:
-                    column_index_1 = frame.columns[column1]
-                    column_index_2 = frame.columns[column2]
-                    equality = frame[column_index_1] == frame[column_index_2]
-                    frame['equally'] = equality
-                    text = frame['equally']'''
-
             elif type(column2) == int:
                 column_index_1 = frame.columns[column1]
                 column_index_2 = frame.columns[column2]
@@ -328,8 +321,8 @@ class Example(Frame):
         button_save.grid(row=0, column=5, padx=5, pady=5, sticky="e")
 
     def greater_pandas(self):
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -377,8 +370,8 @@ class Example(Frame):
 
     def less_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -425,8 +418,8 @@ class Example(Frame):
 
     def gr_or_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -473,8 +466,8 @@ class Example(Frame):
 
     def ls_or_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -521,8 +514,8 @@ class Example(Frame):
 
     def not_eq_pandas(self):
         frame = self.csv
-        column1 = self.first_entry.get().lower()
-        column2 = self.second_entry.get().lower()
+        column1 = self.first_entry.get()
+        column2 = self.second_entry.get()
         try:
             column1 = int(column1)
             column2 = int(column2)
@@ -577,7 +570,6 @@ class Example(Frame):
             bool_list = 'Введите столбцы, которые есть в таблице'
         self.label.insert(1.0, bool_list)
 
-
     def filter_rows(self):
         self.filter_rows = Toplevel(self)
         self.bool_list_label = Label(self.filter_rows, text='Boolean column:')
@@ -589,7 +581,7 @@ class Example(Frame):
         button_ok.grid(row=0, column=3, padx=5, pady=5, sticky="e")
         button_save.grid(row=0, column=4, padx=5, pady=5, sticky="e")
         self.label = Text(self.filter_rows)
-        self.label.insert(1.0, 'Column может являться функцией [equally, greater, less, greater_or_equally, less_or_equally, not_equall]')
+        self.label.insert(1.0, '\n\n\nColumn может являться функцией [equally, greater, less, greater_or_equally, less_or_equally, not_equall]')
         self.label.grid(row=2)
 
     def print_table(self):
@@ -611,11 +603,10 @@ class Example(Frame):
         elif '.pkl' in str(file_name):
             with open(file_name.name, 'wb') as file_obj:
                 self.csv.to_pickle(file_obj)
-                #pickle.dump(self.csv, file_obj)
         elif '.txt' in str(file_name):
             with open(file_name.name, 'a') as file_obj:
                 file_obj.write(
-                    self.csv.to_string(header=False, index=False)
+                    self.csv.to_string(header=True, index=False)
                 )
 
     def open_file(self):
@@ -642,7 +633,8 @@ class Example(Frame):
     def instruction(self):
         self.instruction = Toplevel(self)
         instruction_text = Text(self.instruction)
-        text = 'Инструкция:\n\n!После выполнения каждой функции надо нажать на главном окне обновить!\n\n\n' \
+        text = 'Инструкция:\n\n!После выполнения каждой функции надо нажать на главном окне обновить!\n' \
+               '\nЕсли хотим изменить внутреннее представление таблицы в программе не нажимаем обновить\n\n' \
                'Описание работы функций:eq (==), gr (>), ls (<), ge (>=), le (<=), ne (==),' \
                ' которые возвращают список булевских значений длинной в количество строк сравниваемых столбцов.' \
                ' Реализовать функцию filter_rows (bool_list, copy_table=False) – получение новой таблицы из строк ' \
@@ -656,7 +648,7 @@ class Example(Frame):
 
     def centerWindow(self):
         w = 732
-        h = 60
+        h = 51
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
         x = (sw - w) / 2
@@ -665,7 +657,7 @@ class Example(Frame):
 
 def main():
     root = Tk()
-    ex = Example(root)
+    ex = TablePackage(root)
     root.mainloop()
 
 if __name__ == '__main__':
